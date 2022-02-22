@@ -7,6 +7,7 @@ RUN tar xvzf redis-stable.tar.gz
 RUN cd redis-stable && make && cp src/redis-server /usr/local/bin/ && cp src/redis-cli /usr/local/bin/
 RUN cd /lightning/redis/hiredis && make && make install
 RUN cd /lightning/redis/redis-plus-plus && mkdir build && cd build && cmake -DREDIS_PLUS_PLUS_CXX_STANDARD=11 .. && make && make install
+RUN cd /lightning/redis && g++ -std=c++11 -o rcli redis_client.cc /usr/local/lib/libredis++.a /usr/local/lib/libhiredis.a -pthread
 
 WORKDIR /tmp
 RUN wget https://github.com/dafny-lang/dafny/releases/download/v3.3.0/dafny-3.3.0-x64-ubuntu-16.04.zip

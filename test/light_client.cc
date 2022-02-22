@@ -122,7 +122,7 @@ int process_msg(char *fd, LightningClient &client, char *message){
     }
     status = light_get(client, std::stoi(sep[1]));
     //status = fake_get(std::stoi(sep[1]));
-  } else if(std::string(message).find("delete") != std::string::npos) {
+  } else if(std::string(message).find("del") != std::string::npos) {
 
     std::vector<std::string> sep = split(message, ' ');
     if(sep.size() != 2) {
