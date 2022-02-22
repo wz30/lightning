@@ -1,3 +1,9 @@
 [submodule "redis/redis/hiredis"]
 	path = redis/redis/hiredis
 	url = https://github.com/redis/hiredis.git
+[submodule "redis/redis-plus-plus"]
+	path = redis/redis-plus-plus
+	url = https://github.com/sewenew/redis-plus-plus.git
+[submodule "redis/hiredis"]
+	path = redis/hiredis
+	url = https://github.com/redis/hiredis.git
