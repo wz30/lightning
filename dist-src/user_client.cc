@@ -7,8 +7,12 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+#include <sys/ioctl.h>
 
-#define LOG_FILE "log_file.txt"
+int on = 1;
+int off = 0;
+
+#define LOG_FILE "log/log_file.txt"
 #define BUF_SIZE 1024
 void error_handling(char *message);
 
@@ -32,6 +36,8 @@ int main(int argc, char *argv[])
     }
 
     sock = socket(PF_INET, SOCK_STREAM, 0);
+    //Enable non-blocking
+
     if (sock == -1)
         error_handling("socket() error");
 
@@ -46,7 +52,10 @@ int main(int argc, char *argv[])
         puts("Connected...........");
 
     remove(LOG_FILE);
-    
+   
+        
+    //ioctl(sock, FIONBIO, &(on));
+ 
     int count = 0;
     while (1)
     {
