@@ -14,7 +14,9 @@
 #include <unistd.h>
 #include <assert.h>
 #include <sstream>
-
+#include <sys/ioctl.h>
+int on = 1;
+int off = 1;
 
 #define MAX_HASH_SIZE 16383  // range is 0-16383 
 #define BUF_SIZE 100
@@ -165,6 +167,9 @@ int main(int argc, char *argv[])
     std::thread t1(printList);
 
     serv_sock = socket(PF_INET, SOCK_STREAM, 0);
+    //Enable non blocking
+    ioctl(serv_sock, FIONBIO, &(on));
+
     memset(&serv_adr, 0, sizeof(serv_adr));
     serv_adr.sin_family = AF_INET;
     serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
