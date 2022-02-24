@@ -61,13 +61,13 @@ int main(int argc, char *argv[])
     {
         fputs("Input message(Q to quit): ", stdout);
         //fgets(message, BUF_SIZE, stdin);
-        int num_tests = 100;
+        int num_tests = 10000;
         double sum = 0;
 
 
-        // test get operation
+        auto start = std::chrono::high_resolution_clock::now();
         for(int i = 2; i<num_tests; i++) {
-            std::string str = "set "+std::to_string(i)+" 10"; 
+            std::string str = "set "+std::to_string(i)+" 1024"; 
             strcpy(message, str.c_str());
             
             if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
@@ -77,56 +77,57 @@ int main(int argc, char *argv[])
             std::cout << temp << std::endl;
 
             //std::cout << temp.c_str() <<std::endl;
-            auto start = std::chrono::high_resolution_clock::now();
+            
             
             send(sock, temp.c_str(), strlen(temp.c_str()), 0);
             str_len = recv(sock, message, BUF_SIZE - 1, 0);
             
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> duration = end - start;
-            sum += duration.count();
+            
             // std::cout << duration.count()/num_tests << ", ";
             message[str_len] = 0;
             printf("Message from server: %s\n", message);
         }
-        std::cout << "averge get time" << sum/num_tests << std::endl;
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration = end - start;
+        sum += duration.count();
+        std::cout << "throughput lightning" << num_tests/sum << std::endl;
 
-        write_log_file("averge get time");
-        write_log_file(std::to_string(sum/num_tests));
+        write_log_file("Lightning throughput");
+        write_log_file(std::to_string(num_tests/sum));
  
 	    sleep(5);
 
-        sum = 0;
-        // test delete operation
-        for(int i = 2; i<num_tests; i++) {
-            strcpy(message, ("delete "+std::to_string(i)).c_str());
+        // sum = 0;
+        // // test delete operation
+        // for(int i = 2; i<num_tests; i++) {
+        //     strcpy(message, ("delete "+std::to_string(i)).c_str());
             
-            if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
-                break;
-            std::string user = "[user]";
-            std::string temp = user + std::string(message);
-            std::cout << temp << std::endl;
+        //     if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
+        //         break;
+        //     std::string user = "[user]";
+        //     std::string temp = user + std::string(message);
+        //     std::cout << temp << std::endl;
 
-            //std::cout << temp.c_str() <<std::endl;
-            auto start = std::chrono::high_resolution_clock::now();
+        //     //std::cout << temp.c_str() <<std::endl;
+        //     auto start = std::chrono::high_resolution_clock::now();
             
-            send(sock, temp.c_str(), strlen(temp.c_str()), 0);
-            str_len = recv(sock, message, BUF_SIZE - 1, 0);
+        //     send(sock, temp.c_str(), strlen(temp.c_str()), 0);
+        //     str_len = recv(sock, message, BUF_SIZE - 1, 0);
             
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> duration = end - start;
-            sum += duration.count();
-            // std::cout << duration.count()/num_tests << ", ";
-            message[str_len] = 0;
-            printf("Message from server: %s\n", message);
-        }
-        std::cout << "averge delete time" << sum/num_tests << std::endl;
-        write_log_file("averge delete time");
-        write_log_file(std::to_string(sum/num_tests));
-        sleep(5);
+        //     auto end = std::chrono::high_resolution_clock::now();
+        //     std::chrono::duration<double> duration = end - start;
+        //     sum += duration.count();
+        //     // std::cout << duration.count()/num_tests << ", ";
+        //     message[str_len] = 0;
+        //     printf("Message from server: %s\n", message);
+        // }
+        // std::cout << "averge delete time" << sum/num_tests << std::endl;
+        // write_log_file("averge delete time");
+        // write_log_file(std::to_string(sum/num_tests));
+        // sleep(5);
 
         count ++;
-        if(count==10) break;
+        if(count==5) break;
     }
     close(sock);
     return 0;
