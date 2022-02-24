@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
         auto start = std::chrono::high_resolution_clock::now();
         for(int i = 2; i<num_tests; i++) {
-            std::string str = "set "+std::to_string(i)+" 1024"; 
+            std::string str = "thru "+std::to_string(i)+" 1024"; 
             strcpy(message, str.c_str());
             
             if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))

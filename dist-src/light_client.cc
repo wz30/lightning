@@ -87,6 +87,19 @@ int light_delete(LightningClient &client, int id) {
   return status;
 }
 
+int light_thru(LightningClient &client, int id, int obj_size) {
+#ifndef DEBUG
+  std::cout << "inside lightning throughput function" << std::endl;
+#endif
+  int status1 = light_set(client, id, obj_size);
+
+  int status2 = light_get(client, id);
+
+  int status3 = light_delete(client, id);
+
+  return status1 && status2 && status3;
+}
+
 
 
 // return status -1, -2, normal number
@@ -130,6 +143,15 @@ int process_msg(char *fd, LightningClient &client, char *message){
     }
     status = light_delete(client, std::stoi(sep[1]));
     //status = fake_delete(std::stoi(sep[1]));
+
+  } else if(std::string(message).find("thru") != std::string::npos) {
+    std::vector<std::string> sep = split(message, ' ');
+    if(sep.size() != 3) {
+      return -3;
+    }
+    status = light_thru(client, std::stoi(sep[1]), std::stoi(sep[2]));
+    //status = fake_delete(std::stoi(sep[1]));
+  
   } else if(std::string(message).find("mput") != std::string::npos) {
 
   } else if(std::string(message).find("mget") != std::string::npos) {
