@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
   LightningClient client("/tmp/lightning", "password");
 
   int nums = atoi(argv[1]);
-  int obj_size = 1024
+  int obj_size = 1024;
   
   clear(client, nums, obj_size);
 
