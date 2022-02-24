@@ -85,6 +85,23 @@ int redis_delete( std::string key) {
   return status;
 }
 
+int redis_thru(int id, int object_size) {
+#ifndef DEBUG
+  std::cout << "inside lightning throughput function" << std::endl;
+#endif
+  char *a = new char[object_size];
+  for (int i = 0; i < object_size; i++) {
+    a[i] = 'a';
+  }
+  int status1 = redis_set(std::to_string(id), std::string(a));
+
+  int status2 = redis_get(std::to_string(id));
+
+  int status3 = redis_delete(std::to_string(id));
+
+  return status1 && status2 && status3;
+}
+
 
 
 // return status -1, -2, normal number
@@ -132,6 +149,14 @@ int process_redis_msg(char *fd, char *message){
       return -3;
     }
     status = redis_delete(sep[1]);
+    //status = fake_delete(std::stoi(sep[1]));
+
+  } else if(std::string(message).find("thru") != std::string::npos) {
+    std::vector<std::string> sep = split(message, ' ');
+    if(sep.size() != 3) {
+      return -3;
+    }
+    status = redis_thru(std::stoi(sep[1]), std::stoi(sep[2]));
     //status = fake_delete(std::stoi(sep[1]));
   } else if(std::string(message).find("mput") != std::string::npos) {
 
