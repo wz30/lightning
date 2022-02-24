@@ -8,6 +8,9 @@
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <sys/ioctl.h>
+int on = 1;
+int off = 1;
 
 #include "client.h"
 #define DEBUG
