@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
 
     serv_sock = socket(PF_INET, SOCK_STREAM, 0);
     //Enable non blocking
-    //ioctl(serv_sock, FIONBIO, &(on));
+    ioctl(serv_sock, FIONBIO, &(on));
 
     memset(&serv_adr, 0, sizeof(serv_adr));
     serv_adr.sin_family = AF_INET;
