@@ -87,6 +87,19 @@ int fake_delete( int id) {
 //   return status;
 // }
 
+int fake_thru(int id, int obj_size) {
+#ifndef DEBUG
+  std::cout << "inside fake throughput function" << std::endl;
+#endif
+  int status1 = fake_set(client, id, obj_size);
+
+  int status2 = fake_get(client, id);
+
+  int status3 = fake_delete(client, id);
+
+  return status1 && status2 && status3;
+}
+
 // int light_thru(LightningClient &client, int id, int obj_size) {
 // #ifndef DEBUG
 //   std::cout << "inside lightning throughput function" << std::endl;
@@ -150,7 +163,7 @@ int process_msg(char *fd, char *message){
       return -3;
     }
     // status = light_thru(client, std::stoi(sep[1]), std::stoi(sep[2]));
-    status = fake_delete(std::stoi(sep[1]));
+    status = fake_thru(client, std::stoi(sep[1]), std::stoi(sep[2]));
   
   } else if(std::string(message).find("mput") != std::string::npos) {
 
