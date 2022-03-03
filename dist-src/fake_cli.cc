@@ -9,22 +9,11 @@
 #include <algorithm>
 #include <sstream>
 
-//#include "client.h"
+#include "client.h"
 #define DEBUG
-#define MAX_HASH_SIZE 16383  // range is 0-16383
+
 #define BUF_SIZE 1024
 void error_handling(char *message);
-
-// get hash number between 0-MAX_HASH_SIZE
-int hash(std::string str) {
-  std::hash<std::string> hash_fn;  
- 
-  int num = (int) hash_fn(str) % MAX_HASH_SIZE;
-#ifndef DEBUG
-std::cout << "hash num " << num << std::endl; 
-#endif 
-  return num;
-}
 
 std::vector<std::string> split(std::string str, char del) {
   std::vector<std::string> internal; 
@@ -46,19 +35,19 @@ int fake_set(int id, int obj_size) {
   return 1;
 }
 
-//int light_set(LightningClient &client, int id, int obj_size) {
-//  char *a = new char[obj_size];
-//  for (int i = 0; i < obj_size; i++) {
-//    a[i] = 'a';
-//  }
-//  uint8_t *ptr;
-//  int status = client.Create(id, &ptr, obj_size);
-//  memcpy(ptr, a, obj_size);
-//  status = client.Seal(id);
-//  
-//  delete[] a;
-//  return status; 
-//}
+int light_set(LightningClient &client, int id, int obj_size) {
+  char *a = new char[obj_size];
+  for (int i = 0; i < obj_size; i++) {
+    a[i] = 'a';
+  }
+  uint8_t *ptr;
+  int status = client.Create(id, &ptr, obj_size);
+  memcpy(ptr, a, obj_size);
+  status = client.Seal(id);
+  
+  delete[] a;
+  return status; 
+}
 
 int fake_get(int id) {
   std::cout << "inside fake get function" <<std::endl;
@@ -68,20 +57,47 @@ int fake_get(int id) {
 }
 
 
-//int light_get(LightningClient &client, int id) {
-//#ifndef DEBUG
-//  std::cout << "inside lightning get function" << std::endl;
-//#endif
-//  char *out;
-//  size_t size;
-//  int status = client.Get(id, (uint8_t **)&out, &size);
-//  return status;
-//}
-int fake_delete(int id) {
-  std::cout << "inside fake delete function" <<std::endl;
-  if(id < 0) return -1;
-  // sleep(1);
+int light_get(LightningClient &client, int id) {
+#ifndef DEBUG
+  std::cout << "inside lightning get function" << std::endl;
+#endif
+  char *out;
+  size_t size;
+  int status = client.Get(id, (uint8_t **)&out, &size);
+  return status;
+}
+
+int fake_delete( int id) {
+#ifdef DEBUG
+  std::cout << "inside fake delete function" << std::endl;
+#endif
+  char *out;
+  size_t size;
+  //int status = client.Delete(id);
   return 1;
+}
+
+int light_delete(LightningClient &client, int id) {
+#ifndef DEBUG
+  std::cout << "inside lightning delete function" << std::endl;
+#endif
+  char *out;
+  size_t size;
+  int status = client.Delete(id);
+  return status;
+}
+
+int light_thru(LightningClient &client, int id, int obj_size) {
+#ifndef DEBUG
+  std::cout << "inside lightning throughput function" << std::endl;
+#endif
+  int status1 = light_set(client, id, obj_size);
+
+  int status2 = light_get(client, id);
+
+  int status3 = light_delete(client, id);
+
+  return status1 && status2 && status3;
 }
 
 
@@ -93,8 +109,13 @@ int fake_delete(int id) {
   -1: wrong status from lightning
 
 */
-int process_msg(char *message){
+int process_msg(char *fd, LightningClient &client, char *message){
+//int process_msg(char *fd, char *message) {
   int status =  -1;
+  // check if fd exists
+  std::vector<std::string> seps = split(message, ':');
+  strncpy(fd, (seps[0]).c_str(), (sizeof(fd))-1);  
+
   if(std::string(message).find("set") != std::string::npos) {
     std::vector<std::string> sep = split(message, ' ');
     if(sep.size() != 3) {
@@ -104,25 +125,33 @@ int process_msg(char *message){
     //   std::cout << t << std::endl;
     // }
     // std::cout << std::stoi(sep[2]) << std::endl;
-    status = fake_set(std::stoi(sep[1]), std::stoi(sep[2]));
-    //status = light_set(client, std::stoi(sep[1]), std::stoi(sep[2]));
+    //status = fake_set(std::stoi(sep[1]), std::stoi(sep[2]));
+    status = light_set(client, std::stoi(sep[1]), std::stoi(sep[2]));
   } else if(std::string(message).find("get") != std::string::npos) {
 
     std::vector<std::string> sep = split(message, ' ');
     if(sep.size() != 2) {
       return -3;
     }
-    status = fake_get(std::stoi(sep[1]));
-    //status = light_get(client, std::stoi(sep[1]));
-
+    status = light_get(client, std::stoi(sep[1]));
+    //status = fake_get(std::stoi(sep[1]));
   } else if(std::string(message).find("del") != std::string::npos) {
 
     std::vector<std::string> sep = split(message, ' ');
     if(sep.size() != 2) {
       return -3;
     }
-    status = fake_delete(std::stoi(sep[1]));
+    status = light_delete(client, std::stoi(sep[1]));
+    //status = fake_delete(std::stoi(sep[1]));
 
+  } else if(std::string(message).find("thru") != std::string::npos) {
+    std::vector<std::string> sep = split(message, ' ');
+    if(sep.size() != 3) {
+      return -3;
+    }
+    status = light_thru(client, std::stoi(sep[1]), std::stoi(sep[2]));
+    //status = fake_delete(std::stoi(sep[1]));
+  
   } else if(std::string(message).find("mput") != std::string::npos) {
 
   } else if(std::string(message).find("mget") != std::string::npos) {
@@ -164,7 +193,7 @@ int main(int argc, char *argv[])
     else
         puts("Connected...........");
 
-    //LightningClient client("/tmp/lightning", "password");
+    LightningClient client("/tmp/lightning", "password");
 
     while (1)
     {
@@ -188,14 +217,19 @@ int main(int argc, char *argv[])
           // calling  lightning api to process the message
           int status = -1;
           char state[4];
-          status = process_msg( message);
+          char fd[] = "placeholder"; 
+          status = process_msg(fd, client, message);
+          std::cout << "user fd: " << fd << " fd len: " << strlen(fd) << std::endl;
           if (status < 0) {
           //return error status
             sprintf(state, "%d", status);
-            send(sock, state, std::strlen(state), 0);
+            // send state and fd and it will be fd:state
+            std::string new_state = std::string(fd) + ":"+ std::string(state);
+            send(sock, new_state.c_str(), std::strlen(new_state.c_str()), 0);
           } else {
             sprintf(state, "%d", status);
-            send(sock, state, std::strlen(state), 0);
+            std::string new_state = std::string(fd) + ":"+ std::string(state);
+            send(sock, new_state.c_str(), std::strlen(new_state.c_str()), 0);
 
           }
             std::cout << "send is finished" << std::endl;

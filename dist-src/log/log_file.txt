@@ -1,40 +1,4 @@
 averge get time
-0.000004
+0.063782
 averge delete time
-0.000002
-averge get time
-0.000002
-averge delete time
-0.000002
-averge get time
-0.000001
-averge delete time
-0.000001
-averge get time
-0.000001
-averge delete time
-0.000003
-averge get time
-0.000001
-averge delete time
-0.000001
-averge get time
-0.000002
-averge delete time
-0.000001
-averge get time
-0.000001
-averge delete time
-0.000001
-averge get time
-0.000001
-averge delete time
-0.000002
-averge get time
-0.000002
-averge delete time
-0.000001
-averge get time
-0.000018
-averge delete time
-0.000002
+0.000019

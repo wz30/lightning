@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     int count = 0;
     while (1)
     {
-//        fputs("Input message(Q to quit): ", stdout);
+        fputs("Input message(Q to quit): ", stdout);
         //fgets(message, BUF_SIZE, stdin);
         int num_tests = 3;
         double sum = 0;
@@ -82,7 +82,6 @@ int main(int argc, char *argv[])
             send(sock, temp.c_str(), strlen(temp.c_str()), 0);
             str_len = recv(sock, message, BUF_SIZE - 1, 0);
             
-            std::cout <<"recv len from server: " <<str_len << std::endl; 
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> duration = end - start;
             sum += duration.count();
@@ -113,7 +112,7 @@ int main(int argc, char *argv[])
             
             send(sock, temp.c_str(), strlen(temp.c_str()), 0);
             str_len = recv(sock, message, BUF_SIZE - 1, 0);
-            std::cout <<"recv len from server: " <<str_len << std::endl; 
+            
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> duration = end - start;
             sum += duration.count();
