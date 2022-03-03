@@ -109,7 +109,9 @@ int pick_client(int user_fd)
         ind = rand() % (myList.size());
         res = myList[ind];
     }while(user_fd==res);
+#ifdef DEBUG
     std::cout << "picked fd: " << res << std::endl;
+#endif
     return res;  
 }
 std::vector<std::string> split(std::string str, char del) {
@@ -216,7 +218,9 @@ int main(int argc, char *argv[])
             {
 		        memset(buf, 0, BUF_SIZE);
                 str_len = recv(ep_events[i].data.fd, buf, BUF_SIZE, 0);
+#ifdef DEBUG
 		        std::cout << "message from client: " << buf <<" len: " <<str_len << std::endl;
+#endif
                 if (str_len == 0)
                 {
                     epoll_ctl(epfd, EPOLL_CTL_DEL, ep_events[i].data.fd, NULL); //从epoll中删除套接字
@@ -241,11 +245,15 @@ std::cout << new_buf << std::endl;
                 }
 		        else
                 {  
+#ifdef DEBUG
                     std::cout << "len: " << str_len << std::endl;
                     std::cout << "sending message to user "<< buf << std::endl;  
+#endif 
                     // todo add map relationship between cleint and user
                     std::vector<std::string> seps = split(buf, ':');
+#ifdef DEBUG
                     std::cout << seps[0] << ":" << seps[1] << std::endl;
+#endif
                     send(std::stoi(seps[0]), seps[1].c_str(), std::strlen(seps[1].c_str()), 0);
                 }
             }
