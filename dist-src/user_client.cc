@@ -54,14 +54,14 @@ int main(int argc, char *argv[])
     remove(LOG_FILE);
    
         
-    //ioctl(sock, FIONBIO, &(on));
+//    ioctl(sock, FIONBIO, &(on));
  
     int count = 0;
     while (1)
     {
 //        fputs("Input message(Q to quit): ", stdout);
         //fgets(message, BUF_SIZE, stdin);
-        int num_tests = 3;
+        int num_tests = 6;
         double sum = 0;
 
 
