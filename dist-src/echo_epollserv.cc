@@ -22,7 +22,7 @@ int off = 1;
 #define BUF_SIZE 100
 #define EPOLL_SIZE 50
 
-#define DEBUG
+// #define DEBUG
 #define CLI_NUM 2
 // assume two lightning clients: 0-8190 8191-16383
 // assume threee lightning clients: 0-5500, 5501-11000, 11001-16383
@@ -39,9 +39,9 @@ int my_hash(std::string str) {
     std::hash<std::string> hash_fn;
     int num = (int) hash_fn(str) % (MAX_HASH_SIZE+1);
 
-    #ifndef DEBUG
+#ifdef DEBUG
     std::cout << "hash num" << num << std::endl;
-    #endif
+#endif
 
     return num;
 }
@@ -164,8 +164,9 @@ int main(int argc, char *argv[])
     }
     
     // start thread to print list
+#ifdef DEBUG
     std::thread t1(printList);
-
+#endif
     serv_sock = socket(PF_INET, SOCK_STREAM, 0);
     //Enable non blocking
     ioctl(serv_sock, FIONBIO, &(on));
@@ -196,7 +197,8 @@ int main(int argc, char *argv[])
             break;
         }
 	
-	    std::cout << event_cnt << std::endl;
+	    // std::cout << event_cnt << std::endl;
+
         for (i = 0; i < event_cnt; i++)
         {
             if (ep_events[i].data.fd == serv_sock) //客户端请求连接时
@@ -216,7 +218,9 @@ int main(int argc, char *argv[])
             {
 		        memset(buf, 0, BUF_SIZE);
                 str_len = recv(ep_events[i].data.fd, buf, BUF_SIZE, 0);
+#ifdef DEBUG
 		        std::cout << "message from client: " << buf <<" len: " <<str_len << std::endl;
+#endif
                 if (str_len == 0)
                 {
                     epoll_ctl(epfd, EPOLL_CTL_DEL, ep_events[i].data.fd, NULL); //从epoll中删除套接字
@@ -241,8 +245,10 @@ std::cout << new_buf << std::endl;
                 }
 		        else
                 {  
+#ifdef DEBUG
                     std::cout << "len: " << str_len << std::endl;
                     std::cout << "sending message to user "<< buf << std::endl;  
+#endif 
                     // todo add map relationship between cleint and user
                     std::vector<std::string> seps = split(buf, ':');
                     std::cout << seps[0] << ":" << seps[1] << std::endl;

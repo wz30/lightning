@@ -13,7 +13,7 @@ int on = 1;
 int off = 1;
 
 #include "client.h"
-#define DEBUG
+// #define DEBUG
 
 #define BUF_SIZE 1024
 void error_handling(char *message);
@@ -61,7 +61,7 @@ int fake_get(int id) {
 
 
 int light_get(LightningClient &client, int id) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside lightning get function" << std::endl;
 #endif
   char *out;
@@ -81,7 +81,7 @@ int fake_delete( int id) {
 }
 
 int light_delete(LightningClient &client, int id) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside lightning delete function" << std::endl;
 #endif
   char *out;
@@ -91,7 +91,7 @@ int light_delete(LightningClient &client, int id) {
 }
 
 int light_thru(LightningClient &client, int id, int obj_size) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside lightning throughput function" << std::endl;
 #endif
   int status1 = light_set(client, id, obj_size);
@@ -210,19 +210,22 @@ int main(int argc, char *argv[])
       str_len = recv(sock, message, BUF_SIZE - 1, 0);
       //std::cout << "recving from server " << str_len << std::endl; 
       message[str_len] = 0;
-      printf("Message from server: %s", message);
+      // printf("Message from server: %s", message);
       // todo check if contains user message
       if ( std::string(message).find("[user]") != std::string::npos)
       {
+#ifdef DEBUG
           std::cout << "processing the message and interacting with lightning." << std::endl;
           std::cout << message << std::endl;
-           
+#endif           
           // calling  lightning api to process the message
           int status = -1;
           char state[4];
           char fd[] = "placeholder"; 
           status = process_msg(fd, client, message);
+#ifdef DEBUG
           std::cout << "user fd: " << fd << " fd len: " << strlen(fd) << std::endl;
+#endif
           if (status < 0) {
           //return error status
             sprintf(state, "%d", status);
