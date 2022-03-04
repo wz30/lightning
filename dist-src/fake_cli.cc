@@ -217,7 +217,12 @@ int main(int argc, char *argv[])
         break;
 
       // write(sock, message, strlen(message));
+      auto start = std::chrono::high_resolution_clock::now();
       str_len = recv(sock, message, BUF_SIZE - 1, 0);
+      auto end = std::chrono::high_resolution_clock::now();
+      std::chrono::duration<double> duration = end - start;
+      std::cout <<"receiving message from master time: " << duration.count() << std::endl;
+      
       //std::cout << "recving from server " << str_len << std::endl; 
       message[str_len] = 0;
 #ifdef DEBUG
@@ -243,12 +248,22 @@ int main(int argc, char *argv[])
             sprintf(state, "%d", status);
             // send state and fd and it will be fd:state
             std::string new_state = std::string(fd) + ":"+ std::string(state);
+            
+            auto start = std::chrono::high_resolution_clock::now();
             send(sock, new_state.c_str(), std::strlen(new_state.c_str()), 0);
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> duration = end - start;
+            std::cout <<"send message time: " << duration.count() << std::endl;
+            
           } else {
             sprintf(state, "%d", status);
             std::string new_state = std::string(fd) + ":"+ std::string(state);
+            auto start = std::chrono::high_resolution_clock::now();
             send(sock, new_state.c_str(), std::strlen(new_state.c_str()), 0);
-
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> duration = end - start;
+            std::cout <<"send message time: " << duration.count() << std::endl;
+            
           }
             std::cout << "send is finished" << std::endl;
       } else {

@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
         // sleep(5);
 
         count ++;
-        if(count==5) break;
+        if(count==1) break;
     }
     close(sock);
     return 0;

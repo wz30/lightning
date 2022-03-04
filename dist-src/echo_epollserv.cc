@@ -217,7 +217,13 @@ int main(int argc, char *argv[])
             else //是客户端套接字时
             {
 		        memset(buf, 0, BUF_SIZE);
+
+                auto start = std::chrono::high_resolution_clock::now();
                 str_len = recv(ep_events[i].data.fd, buf, BUF_SIZE, 0);
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> duration = end - start;
+                std::cout <<"receive message from user/client time: " << duration.count() << std::endl;
+                
 #ifdef DEBUG
 		        std::cout << "message from client: " << buf <<" len: " <<str_len << std::endl;
 #endif
@@ -240,8 +246,11 @@ int main(int argc, char *argv[])
 std::cout << "forwarding message to client: " << fd << std::endl;
 std::cout << new_buf << std::endl;
 #endif
-
+                    auto start = std::chrono::high_resolution_clock::now();
                     send(fd, new_buf.c_str(), new_buf.size(), 0);
+                    auto end = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double> duration = end - start;
+                    std::cout <<"forward message time: " << duration.count() << std::endl;
                 }
 		        else
                 {  
@@ -254,7 +263,13 @@ std::cout << new_buf << std::endl;
 #ifdef DEBUG
                     std::cout << seps[0] << ":" << seps[1] << std::endl;
 #endif
+
+                    auto start = std::chrono::high_resolution_clock::now();
                     send(std::stoi(seps[0]), seps[1].c_str(), std::strlen(seps[1].c_str()), 0);
+                    auto end = std::chrono::high_resolution_clock::now();
+                    std::chrono::duration<double> duration = end - start;
+                    std::cout <<"sending message to user time: " << duration.count() << std::endl;
+                   
                 }
             }
         }
