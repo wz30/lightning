@@ -1,4 +1,0 @@
-averge get time
-0.000199
-averge delete time
-0.000263

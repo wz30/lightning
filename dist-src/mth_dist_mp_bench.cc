@@ -8,6 +8,7 @@
 #include <cstring>
 #include <fstream>
 #include <sys/ioctl.h>
+#include <thread>
 
 int on = 1;
 int off = 0;
@@ -22,7 +23,7 @@ void write_log_file( const std::string &text )
     log_file << text << std::endl;
 }
 
-int num_tests = 3;
+int num_tests = 40;
 
 void sendMsg(int sock) {
     char message[BUF_SIZE];
@@ -51,6 +52,7 @@ void recvMsg(int sock) {
         if(str_len>0) counter++;
         message[str_len] = 0;
         printf("Message from server: %s\n", message);
+        std::cout << counter << std::endl;
         if(counter==num_tests-2) break;
     }
 }
@@ -89,14 +91,14 @@ int main(int argc, char *argv[])
     remove(LOG_FILE);
    
         
-    //ioctl(sock, FIONBIO, &(on));
+    ioctl(sock, FIONBIO, &(on));
  
     int count = 0;
     while (1)
     {
         auto start = std::chrono::high_resolution_clock::now();
-        std::thread send_thr (sendMsg);
-        std::thread recv_thr (recvMsg);
+        std::thread send_thr (sendMsg, sock);
+        std::thread recv_thr (recvMsg, sock);
         
         send_thr.join();
         recv_thr.join();
