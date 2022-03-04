@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     {
         fputs("Input message(Q to quit): ", stdout);
         //fgets(message, BUF_SIZE, stdin);
-        int num_tests = 10000;
+        int num_tests = 3;
         double sum = 0;
 
 

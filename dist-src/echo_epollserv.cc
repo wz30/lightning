@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     }
     
     // start thread to print list
-    std::thread t1(printList);
+    //std::thread t1(printList);
 
     serv_sock = socket(PF_INET, SOCK_STREAM, 0);
     //Enable non blocking
