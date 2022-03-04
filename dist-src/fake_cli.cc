@@ -10,7 +10,7 @@
 #include <sstream>
 
 // #include "client.h"
-#define DEBUG
+//#define DEBUG
 
 #define BUF_SIZE 1024
 void error_handling(char *message);
@@ -91,11 +91,11 @@ int fake_thru(int id, int obj_size) {
 #ifndef DEBUG
   std::cout << "inside fake throughput function" << std::endl;
 #endif
-  int status1 = fake_set(client, id, obj_size);
+  int status1 = fake_set(id, obj_size);
 
-  int status2 = fake_get(client, id);
+  int status2 = fake_get(id);
 
-  int status3 = fake_delete(client, id);
+  int status3 = fake_delete(id);
 
   return status1 && status2 && status3;
 }
@@ -163,7 +163,7 @@ int process_msg(char *fd, char *message){
       return -3;
     }
     // status = light_thru(client, std::stoi(sep[1]), std::stoi(sep[2]));
-    status = fake_thru(client, std::stoi(sep[1]), std::stoi(sep[2]));
+    status = fake_thru(std::stoi(sep[1]), std::stoi(sep[2]));
   
   } else if(std::string(message).find("mput") != std::string::npos) {
 

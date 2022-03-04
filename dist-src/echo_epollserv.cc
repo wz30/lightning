@@ -22,7 +22,7 @@ int off = 1;
 #define BUF_SIZE 100
 #define EPOLL_SIZE 50
 
-#define DEBUG
+//#define DEBUG
 #define CLI_NUM 2
 // assume two lightning clients: 0-8190 8191-16383
 // assume threee lightning clients: 0-5500, 5501-11000, 11001-16383
