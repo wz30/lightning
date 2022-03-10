@@ -12,7 +12,7 @@
 #include <bits/stdc++.h>
 //#include "client.h"
 
-#define DEBUG
+// #define DEBUG
 
 using namespace sw::redis;
 using namespace std; 
@@ -56,7 +56,7 @@ int fake_get(int id) {
 
 
 int redis_get(std::string key) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside redis get function" << std::endl;
 #endif
   auto val = client.get(key);
@@ -78,7 +78,7 @@ int fake_delete( int id) {
 }
 
 int redis_delete( std::string key) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside redis delete function" << std::endl;
 #endif
   int status = client.del(key);
@@ -106,16 +106,11 @@ int process_redis_msg(char *fd, char *message){
     if(sep.size() != 3) {
       return -3;
     }
-    // for(std::string t : sep) {
-    //   std::cout << t << std::endl;
-    // }
-    // std::cout << std::stoi(sep[2]) << std::endl;
-    //status = fake_set(std::stoi(sep[1]), std::stoi(sep[2]));
-    auto start = std::chrono::high_resolution_clock::now(); 
+    // auto start = std::chrono::high_resolution_clock::now(); 
     status = redis_set(sep[1], sep[2]);
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    std::cout << "redis set time" << duration.count() << std::endl;
+    // auto end = std::chrono::high_resolution_clock::now();
+    // std::chrono::duration<double> duration = end - start;
+    // std::cout << "redis set time" << duration.count() << std::endl;
 
   } else if(std::string(message).find("get") != std::string::npos) {
 
@@ -192,15 +187,18 @@ int main(int argc, char *argv[])
       // todo check if contains user message
       if ( std::string(message).find("[user]") != std::string::npos)
       {
+#ifdef DEBUG
           std::cout << "processing the message and interacting with lightning." << std::endl;
           std::cout << message << std::endl;
-           
+#endif           
           // calling  lightning api to process the message
           int status = -1;
           char state[4];
           char fd[] = "placeholder"; 
           status = process_redis_msg(fd, message);
+#ifdef DEBUG
           std::cout << "user fd: " << fd << " fd len: " << strlen(fd) << std::endl;
+#endif
           if (status < 0) {
           //return error status
             sprintf(state, "%d", status);
@@ -213,7 +211,9 @@ int main(int argc, char *argv[])
             send(sock, new_state.c_str(), std::strlen(new_state.c_str()), 0);
 
           }
+// #ifdef DEBUG
             std::cout << "send is finished" << std::endl;
+// #endif
       } else {
           std::cout << "incorrect message from server" << std::endl; 
       }
