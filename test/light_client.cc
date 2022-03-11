@@ -8,9 +8,12 @@
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <sys/ioctl.h>
+int on = 1;
+int off = 1;
 
 #include "client.h"
-#define DEBUG
+// #define DEBUG
 
 #define BUF_SIZE 1024
 void error_handling(char *message);
@@ -58,7 +61,7 @@ int fake_get(int id) {
 
 
 int light_get(LightningClient &client, int id) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside lightning get function" << std::endl;
 #endif
   char *out;
@@ -78,13 +81,26 @@ int fake_delete( int id) {
 }
 
 int light_delete(LightningClient &client, int id) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside lightning delete function" << std::endl;
 #endif
   char *out;
   size_t size;
   int status = client.Delete(id);
   return status;
+}
+
+int light_thru(LightningClient &client, int id, int obj_size) {
+#ifdef DEBUG
+  std::cout << "inside lightning throughput function" << std::endl;
+#endif
+  int status1 = light_set(client, id, obj_size);
+
+  int status2 = light_get(client, id);
+
+  int status3 = light_delete(client, id);
+
+  return status1 && status2 && status3;
 }
 
 
@@ -130,6 +146,15 @@ int process_msg(char *fd, LightningClient &client, char *message){
     }
     status = light_delete(client, std::stoi(sep[1]));
     //status = fake_delete(std::stoi(sep[1]));
+
+  } else if(std::string(message).find("thru") != std::string::npos) {
+    std::vector<std::string> sep = split(message, ' ');
+    if(sep.size() != 3) {
+      return -3;
+    }
+    status = light_thru(client, std::stoi(sep[1]), std::stoi(sep[2]));
+    //status = fake_delete(std::stoi(sep[1]));
+  
   } else if(std::string(message).find("mput") != std::string::npos) {
 
   } else if(std::string(message).find("mget") != std::string::npos) {
@@ -185,19 +210,22 @@ int main(int argc, char *argv[])
       str_len = recv(sock, message, BUF_SIZE - 1, 0);
       //std::cout << "recving from server " << str_len << std::endl; 
       message[str_len] = 0;
-      printf("Message from server: %s", message);
+      // printf("Message from server: %s", message);
       // todo check if contains user message
       if ( std::string(message).find("[user]") != std::string::npos)
       {
+#ifdef DEBUG
           std::cout << "processing the message and interacting with lightning." << std::endl;
           std::cout << message << std::endl;
-           
+#endif           
           // calling  lightning api to process the message
           int status = -1;
           char state[4];
           char fd[] = "placeholder"; 
           status = process_msg(fd, client, message);
+#ifdef DEBUG
           std::cout << "user fd: " << fd << " fd len: " << strlen(fd) << std::endl;
+#endif
           if (status < 0) {
           //return error status
             sprintf(state, "%d", status);
@@ -225,4 +253,3 @@ void error_handling(char *message)
     fputc('\n', stderr);
     exit(1);
 }
-

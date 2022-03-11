@@ -1,0 +1,40 @@
+averge get time
+0.000223
+averge delete time
+0.000189
+averge get time
+0.000184
+averge delete time
+0.000182
+averge get time
+0.000189
+averge delete time
+0.000196
+averge get time
+0.000178
+averge delete time
+0.000180
+averge get time
+0.000195
+averge delete time
+0.000196
+averge get time
+0.000186
+averge delete time
+0.000182
+averge get time
+0.000192
+averge delete time
+0.000177
+averge get time
+0.000195
+averge delete time
+0.000202
+averge get time
+0.000178
+averge delete time
+0.000205
+averge get time
+0.000185
+averge delete time
+0.000196
