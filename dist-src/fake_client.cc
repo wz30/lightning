@@ -85,6 +85,19 @@ int redis_delete( std::string key) {
   return status;
 }
 
+int fake_thru(int id, int obj_size) {
+#ifdef DEBUG
+  std::cout << "inside fake throughput function" << std::endl;
+#endif
+  int status1 = fake_set(id, obj_size);
+
+  int status2 = fake_get(id);
+
+  int status3 = fake_delete(id);
+
+  return status1 && status2 && status3;
+}
+
 
 
 // return status -1, -2, normal number
@@ -128,6 +141,14 @@ int process_redis_msg(char *fd, char *message){
     }
     // status = redis_delete(sep[1]);
     status = fake_delete(std::stoi(sep[1]));
+  } else if(std::string(message).find("thru") != std::string::npos) {
+    std::vector<std::string> sep = split(message, ' ');
+    if(sep.size() != 3) {
+      return -3;
+    }
+    status = fake_thru(std::stoi(sep[1]), std::stoi(sep[2]));
+    //status = fake_delete(std::stoi(sep[1]));
+  
   } else if(std::string(message).find("mput") != std::string::npos) {
 
   } else if(std::string(message).find("mget") != std::string::npos) {
