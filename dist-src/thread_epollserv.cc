@@ -144,6 +144,8 @@ int get_id(std::string buf) {
 //}
 
 void send_client(std::string buf, int user_fd){
+    // only user's request contain [user]
+    // todo sanity check
     int id = get_id(buf);
     //todo: consistent hashing 
     int fd = pick_client_hash(user_fd, std::to_string(id));
@@ -255,31 +257,12 @@ int main(int argc, char *argv[])
                 else if(std::string(buf).find("[user]") != string::npos)
                 {
                     // create a new thread to handle this
-
-                    // only user's request contain [user]
-                    // todo sanity check
-                    int id = get_id(buf);
-                    //todo: consistent hashing 
-                    int fd = pick_client_hash(ep_events[i].data.fd, std::to_string(id));
-                    std::string new_buf = std::to_string(ep_events[i].data.fd) + ":" + std::string(buf); 
-#ifdef DEBUG
-std::cout << "forwarding message to client: " << fd << std::endl;
-std::cout << new_buf << std::endl;
-#endif
-
-                    send(fd, new_buf.c_str(), new_buf.size(), 0);
+                    send_client(buf, ep_events[i].data.fd);
                 }
 		        else
                 {  
                     //create a new thread to handle this
-#ifdef DEBUG
-                    std::cout << "len: " << str_len << std::endl;
-                    std::cout << "sending message to user "<< buf << std::endl;  
-#endif 
-                    // todo add map relationship between cleint and user
-                    std::vector<std::string> seps = split(buf, ':');
-                    std::cout << seps[0] << ":" << seps[1] << std::endl;
-                    send(std::stoi(seps[0]), seps[1].c_str(), std::strlen(seps[1].c_str()), 0);
+                    send_user(buf);
                 }
             }
         }
