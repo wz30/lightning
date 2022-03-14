@@ -93,6 +93,7 @@ int main(int argc, char *argv[])
         auto start = std::chrono::high_resolution_clock::now();
         for(int i = 2; i<num_tests; i++) {
             std::thread t1(send_cluster, sock, i);
+            t1.detach();
             // send_cluster(sock, i);
         }
         auto end = std::chrono::high_resolution_clock::now();
