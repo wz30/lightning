@@ -160,7 +160,7 @@ std::cout << new_buf << std::endl;
 
 void send_user(std::string buf) {
 #ifdef DEBUG
-    std::cout << "len: " << str_len << std::endl;
+    // std::cout << "len: " << str_len << std::endl;
     std::cout << "sending message to user "<< buf << std::endl;  
 #endif 
     // todo add map relationship between cleint and user
