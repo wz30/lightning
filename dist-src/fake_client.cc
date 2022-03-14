@@ -12,7 +12,7 @@
 #include <bits/stdc++.h>
 //#include "client.h"
 
-#define DEBUG
+// #define DEBUG
 
 using namespace sw::redis;
 using namespace std; 
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
       str_len = recv(sock, message, BUF_SIZE - 1, 0);
       //std::cout << "recving from server " << str_len << std::endl; 
       message[str_len] = 0;
-      printf("Message from server: %s", message);
+      // printf("Message from server: %s", message);
       // todo check if contains user message
       if ( std::string(message).find("[user]") != std::string::npos)
       {

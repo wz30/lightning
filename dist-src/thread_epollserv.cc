@@ -22,7 +22,7 @@ int off = 1;
 #define BUF_SIZE 100
 #define EPOLL_SIZE 50
 
-#define DEBUG
+// #define DEBUG
 #define CLI_NUM 3
 // assume two lightning clients: 0-8190 8191-16383
 // assume threee lightning clients: 0-5500, 5501-11000, 11001-16383
@@ -261,18 +261,20 @@ int main(int argc, char *argv[])
                 else if(std::string(buf).find("[user]") != string::npos)
                 {
                     // create a new thread to handle this
-                    printf("start thr1\n");
+                    // printf("start thr1\n");
+                    // send_client(buf, ep_events[i].data.fd);
                     thread th1(send_client, buf, ep_events[i].data.fd );
                     th1.detach();
-                    printf("end thr1\n");
+                    // printf("end thr1\n");
                 }
 		        else
                 {  
                     //create a new thread to handle this
-                    printf("start thr2\n");
+                    // printf("start thr2\n");
+                    // send_user(buf);
                     thread th2(send_user, buf);
                     th2.detach();
-                    printf("end thr2\n");
+                    // printf("end thr2\n");
                 }
             }
         }
