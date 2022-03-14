@@ -257,12 +257,13 @@ int main(int argc, char *argv[])
                 else if(std::string(buf).find("[user]") != string::npos)
                 {
                     // create a new thread to handle this
-                    send_client(buf, ep_events[i].data.fd);
+
+                    thread th1(send_client, buf, ep_events[i].data.fd );
                 }
 		        else
                 {  
                     //create a new thread to handle this
-                    send_user(buf);
+                    thread th2(send_user, buf);
                 }
             }
         }
