@@ -12,7 +12,7 @@
 #include <bits/stdc++.h>
 //#include "client.h"
 
-// #define DEBUG
+#define DEBUG
 
 using namespace sw::redis;
 using namespace std; 
