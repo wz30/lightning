@@ -30,7 +30,7 @@ void send_cluster(int sock, int i){
     strcpy(message, str.c_str());
     
     if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
-        break;
+        return;
     std::string user = "[user]:";
     std::string temp = user + std::string(message);
     std::cout << temp << std::endl;
