@@ -269,6 +269,8 @@ int main(int argc, char *argv[])
                     //create a new thread to handle this
                     thread th2(send_user, buf);
                 }
+                th1.join();
+                th2.join();
             }
         }
     }
