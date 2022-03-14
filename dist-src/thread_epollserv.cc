@@ -146,6 +146,10 @@ int get_id(std::string buf) {
 void send_client(std::string buf, int user_fd){
     // only user's request contain [user]
     // todo sanity check
+#ifdef DEBUG
+std::cout << "user_fd " << user_fd << std::endl;
+std::cout << "buf " << buf << std::endl;
+#endif
     int id = get_id(buf);
     //todo: consistent hashing 
     int fd = pick_client_hash(user_fd, std::to_string(id));
