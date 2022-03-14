@@ -263,7 +263,7 @@ int main(int argc, char *argv[])
                     // create a new thread to handle this
                     printf("start thr1\n");
                     thread th1(send_client, buf, ep_events[i].data.fd );
-                    th1.join();
+                    th1.deteach();
                     printf("end thr1\n");
                 }
 		        else
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
                     //create a new thread to handle this
                     printf("start thr2\n");
                     thread th2(send_user, buf);
-                    th2.join();
+                    th2.detach();
                     printf("end thr2\n");
                 }
             }
