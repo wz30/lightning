@@ -83,7 +83,11 @@ void printStats() {
         std::cout << "cnt1: " << cnt1 << std::endl;
         std::cout << "cnt2: " << cnt2 << std::endl;
         std::cout << "cnt3: " << cnt3 << std::endl;
-        if(l1==cnt1 && l2==cnt2 && l3==cnt3) break;
+        if(l1==cnt1 && l2==cnt2 && l3==cnt3){
+            cnt1 = 0;
+            cnt2 = 0;
+            cnt3 = 0;
+        }
         else {
             l1 = cnt1; l2 = cnt2; l3 = cnt3;
         } 
