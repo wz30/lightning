@@ -76,10 +76,17 @@ int cnt3 = 0;
 // pring hashing stats for three worker
 void printStats() {
     // report hash stats
+    int l1 = 0;
+    int l2 = 0;
+    int l3 = 0;
     while(1){
         std::cout << "cnt1: " << cnt1 << std::endl;
         std::cout << "cnt2: " << cnt2 << std::endl;
         std::cout << "cnt3: " << cnt3 << std::endl;
+        if(l1==cnt1 && l2==cnt2 && l3==cnt3) break;
+        else {
+            l1 = cnt1; l2 = cnt2; l3 = cnt3;
+        } 
         sleep(5);
     }
 }
