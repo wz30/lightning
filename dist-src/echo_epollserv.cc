@@ -76,10 +76,12 @@ int cnt3 = 0;
 // pring hashing stats for three worker
 void printStats() {
     // report hash stats
-    std::cout << "cnt1: " << cnt1 << std::endl;
-    std::cout << "cnt2: " << cnt2 << std::endl;
-    std::cout << "cnt3: " << cnt3 << std::endl;
-    sleep(5);
+    while(1){
+        std::cout << "cnt1: " << cnt1 << std::endl;
+        std::cout << "cnt2: " << cnt2 << std::endl;
+        std::cout << "cnt3: " << cnt3 << std::endl;
+        sleep(5);
+    }
 }
 
 // using hashing and assume the server will not leave the cluster
