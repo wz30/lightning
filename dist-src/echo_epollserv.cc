@@ -73,6 +73,15 @@ int cnt1 = 0;
 int cnt2 = 0;
 int cnt3 = 0;
 
+// pring hashing stats for three worker
+void printStats() {
+    // report hash stats
+    std::cout << "cnt1: " << cnt1 << std::endl;
+    std::cout << "cnt2: " << cnt2 << std::endl;
+    std::cout << "cnt3: " << cnt3 << std::endl;
+    sleep(5);
+}
+
 // using hashing and assume the server will not leave the cluster
 // we need at least three servers
 int pick_client_hash(int user_fd, std::string id) {
@@ -173,6 +182,9 @@ int main(int argc, char *argv[])
 #ifdef DEBUG
     std::thread t1(printList);
 #endif
+
+    std::thread t2(printStats);
+
     serv_sock = socket(PF_INET, SOCK_STREAM, 0);
     //Enable non blocking
     ioctl(serv_sock, FIONBIO, &(on));
@@ -261,10 +273,7 @@ std::cout << new_buf << std::endl;
                     send(std::stoi(seps[0]), seps[1].c_str(), std::strlen(seps[1].c_str()), 0);
                 }
 
-                // report hash stats
-                std::cout << "cnt1: " << cnt1 << std::endl;
-                std::cout << "cnt2: " << cnt2 << std::endl;
-                std::cout << "cnt3: " << cnt3 << std::endl;
+
             }
         }
     }
