@@ -69,6 +69,9 @@ int get_fd_by_num(int user_fd, int num) {
     return myList[num-1];
 }
 
+int cnt1 = 0;
+int cnt2 = 0;
+int cnt3 = 0;
 
 // using hashing and assume the server will not leave the cluster
 // we need at least three servers
@@ -87,10 +90,13 @@ int pick_client_hash(int user_fd, std::string id) {
         if (num < 5500) {
             // get first fd
             res = get_fd_by_num(user_fd, 1);
+            cnt1++;
         }else if (num >=5501 && num <11000) {
             res = get_fd_by_num(user_fd, 2);
+            cnt2++;
         } else {
             res = get_fd_by_num(user_fd, 3);
+            cnt3++;
         }
 
     } else if(CLI_NUM == 1) {
@@ -254,6 +260,11 @@ std::cout << new_buf << std::endl;
                     std::cout << seps[0] << ":" << seps[1] << std::endl;
                     send(std::stoi(seps[0]), seps[1].c_str(), std::strlen(seps[1].c_str()), 0);
                 }
+
+                // report hash stats
+                std::cout << "cnt1: " << cnt1 << std::endl;
+                std::cout << "cnt2: " << cnt2 << std::endl;
+                std::cout << "cnt3: " << cnt3 << std::endl;
             }
         }
     }
