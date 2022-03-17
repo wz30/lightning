@@ -94,8 +94,39 @@ int main(int argc, char *argv[])
 
         write_log_file("averge set time");
         write_log_file(std::to_string(sum/num_tests));
- 
+        
 	    sleep(5);
+
+        // get
+        sum = 0;
+        // test delete operation
+        for(int i = 2; i<num_tests; i++) {
+            strcpy(message, ("get "+std::to_string(i)).c_str());
+            
+            if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
+                break;
+            std::string user = "[user]";
+            std::string temp = user + std::string(message);
+            std::cout << temp << std::endl;
+
+            //std::cout << temp.c_str() <<std::endl;
+            auto start = std::chrono::high_resolution_clock::now();
+            
+            send(sock, temp.c_str(), strlen(temp.c_str()), 0);
+            str_len = recv(sock, message, BUF_SIZE - 1, 0);
+            
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> duration = end - start;
+            sum += duration.count();
+            // std::cout << duration.count()/num_tests << ", ";
+            message[str_len] = 0;
+            printf("Message from server: %s\n", message);
+        }
+        std::cout << "averge get time" << sum/num_tests << std::endl;
+        write_log_file("averge get time");
+        write_log_file(std::to_string(sum/num_tests));
+        sleep(5);
+
 
         sum = 0;
         // test delete operation
