@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
     std::thread t1(printList);
 #endif
 
-    std::thread t2(printStats);
+    //std::thread t2(printStats);
 
     serv_sock = socket(PF_INET, SOCK_STREAM, 0);
     //Enable non blocking
