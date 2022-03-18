@@ -213,13 +213,13 @@ int main(int argc, char *argv[])
       str_len = recv(sock, message, BUF_SIZE - 1, 0);
       //std::cout << "recving from server " << str_len << std::endl; 
       message[str_len] = 0;
-#ifdef
+#ifdef DEBUG
       printf("Message from server: %s", message);
 #endif
       // todo check if contains user message
       if ( std::string(message).find("[user]") != std::string::npos)
       {
-#ifdef
+#ifdef DEBUG
           std::cout << "processing the message and interacting with lightning." << std::endl;
           std::cout << message << std::endl;
 #endif           
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
           char state[4];
           char fd[] = "placeholder"; 
           status = process_redis_msg(fd, message);
-#ifdef
+#ifdef DEBUG
           std::cout << "user fd: " << fd << " fd len: " << strlen(fd) << std::endl;
 #endif
           if (status < 0) {
