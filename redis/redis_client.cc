@@ -12,7 +12,7 @@
 #include <bits/stdc++.h>
 //#include "client.h"
 
-#define DEBUG
+// #define DEBUG
 
 using namespace sw::redis;
 using namespace std; 
@@ -56,7 +56,7 @@ int fake_get(int id) {
 
 
 int redis_get(std::string key) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside redis get function" << std::endl;
 #endif
   auto val = client.get(key);
@@ -78,7 +78,7 @@ int fake_delete( int id) {
 }
 
 int redis_delete( std::string key) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside redis delete function" << std::endl;
 #endif
   int status = client.del(key);
@@ -86,7 +86,7 @@ int redis_delete( std::string key) {
 }
 
 int redis_thru(int id, int object_size) {
-#ifndef DEBUG
+#ifdef DEBUG
   std::cout << "inside lightning throughput function" << std::endl;
 #endif
   char *a = new char[object_size];
@@ -128,11 +128,11 @@ int process_redis_msg(char *fd, char *message){
     // }
     // std::cout << std::stoi(sep[2]) << std::endl;
     //status = fake_set(std::stoi(sep[1]), std::stoi(sep[2]));
-    auto start = std::chrono::high_resolution_clock::now(); 
+    // auto start = std::chrono::high_resolution_clock::now(); 
     status = redis_set(sep[1], sep[2]);
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    std::cout << "redis set time" << duration.count() << std::endl;
+    // auto end = std::chrono::high_resolution_clock::now();
+    // std::chrono::duration<double> duration = end - start;
+    // std::cout << "redis set time" << duration.count() << std::endl;
 
   } else if(std::string(message).find("get") != std::string::npos) {
 
@@ -213,19 +213,24 @@ int main(int argc, char *argv[])
       str_len = recv(sock, message, BUF_SIZE - 1, 0);
       //std::cout << "recving from server " << str_len << std::endl; 
       message[str_len] = 0;
+#ifdef
       printf("Message from server: %s", message);
+#endif
       // todo check if contains user message
       if ( std::string(message).find("[user]") != std::string::npos)
       {
+#ifdef
           std::cout << "processing the message and interacting with lightning." << std::endl;
           std::cout << message << std::endl;
-           
+#endif           
           // calling  lightning api to process the message
           int status = -1;
           char state[4];
           char fd[] = "placeholder"; 
           status = process_redis_msg(fd, message);
+#ifdef
           std::cout << "user fd: " << fd << " fd len: " << strlen(fd) << std::endl;
+#endif
           if (status < 0) {
           //return error status
             sprintf(state, "%d", status);
