@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
         double sum = 0;
 
 
-        // test get operation
+        // test set operation
         for(int i = 2; i<num_tests; i++) {
             std::string str = "set "+std::to_string(i)+" 256"; 
 
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
         // get
         sum = 0;
-        // test delete operation
+        // test get operation
         for(int i = 2; i<num_tests; i++) {
             strcpy(message, ("get "+std::to_string(i)).c_str());
             
