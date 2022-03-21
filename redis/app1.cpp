@@ -53,8 +53,10 @@ int main(int argc, char *argv[]) {
     duration = end - start;
 
     std::cout << "del: " << duration.count()/num_test  << std::endl; 
+    std::cout << "cluster:" << std::endl;
+for(int i = 0; i<10; i++) {
     // redis cluster
-    auto redis_cluster = RedisCluster("tcp://127.0.0.1:7000");
+    auto redis_cluster = RedisCluster("tcp://172.17.0.2:7000");
      
     start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i<num_test; i++) {
@@ -87,7 +89,7 @@ int main(int argc, char *argv[]) {
     end = std::chrono::high_resolution_clock::now();
     duration = end - start;
     std::cout << "del: " <<duration.count()/num_test  << std::endl; 
-    
+}    
 //    auto val = redis.get(key);    // val is of type OptionalString. See 'API Reference' section for details.
 //    if (val) {
 //        // Dereference val to get the returned value of std::string type.

@@ -12,7 +12,7 @@
 int on = 1;
 int off = 0;
 
-#define LOG_FILE "log-thru/log_file.txt"
+#define LOG_FILE "log_file_thru.txt"
 #define BUF_SIZE 1024
 void error_handling(char *message);
 
