@@ -1,10 +1,10 @@
 Lightning throughput
-9720.929609
+4892.753447
 Lightning throughput
-9804.768249
+5279.142594
 Lightning throughput
-9829.210412
+5229.195347
 Lightning throughput
-9911.413786
+4895.340614
 Lightning throughput
-9838.424392
+5173.426768
