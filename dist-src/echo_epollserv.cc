@@ -23,7 +23,7 @@ int off = 1;
 #define EPOLL_SIZE 50
 
 // #define DEBUG
-#define CLI_NUM 5
+#define CLI_NUM 7
 // assume two lightning clients: 0-8190 8191-16383
 // assume threee lightning clients: 0-5500, 5501-11000, 11001-16383
 
@@ -136,6 +136,22 @@ int pick_client_hash(int user_fd, std::string id) {
             res = get_fd_by_num(user_fd, 5);
         } 
     
+    } else if(CLI_NUM == 7) {
+        if (num < 2400) {
+            res = get_fd_by_num(user_fd, 1);
+        } else if(num>=2400 && num < 4800) {
+            res = get_fd_by_num(user_fd, 2);
+        } else if(num>=4800 && num < 7200) {
+            res = get_fd_by_num(user_fd, 3);
+        } else if(num>=7200 && num < 9600) {
+            res = get_fd_by_num(user_fd, 4);
+        } else if(num>=9600 && num < 12000) {
+            res = get_fd_by_num(user_fd, 5);
+        } else if(num>=12000 && num < 14400) {
+            res = get_fd_by_num(user_fd, 6);
+        } else {
+            res = get_fd_by_num(user_fd, 7);
+        }  
     }
     return res;
 }
