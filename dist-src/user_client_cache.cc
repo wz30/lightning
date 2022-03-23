@@ -14,7 +14,7 @@ int off = 0;
 
 #define LOG_FILE "log/log_file.txt"
 #define BUF_SIZE 1024
-#define CLI_NUM 3 
+#define CLI_NUM 1 
 
 #define MAX_HASH_SIZE 16383  // range is 0-16383 
 
