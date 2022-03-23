@@ -1,60 +1,60 @@
 averge set time
-0.000214
+0.000143
 averge get time
-0.000194
+0.000038
 averge delete time
-0.000199
+0.000039
 averge set time
-0.000188
+0.000062
 averge get time
-0.000170
+0.000083
 averge delete time
-0.000196
+0.000089
 averge set time
-0.000197
+0.000060
 averge get time
+0.000082
+averge delete time
+0.000064
+averge set time
+0.000051
+averge get time
+0.000080
+averge delete time
+0.000125
+averge set time
+0.000080
+averge get time
+0.000230
+averge delete time
+0.000128
+averge set time
+0.000064
+averge get time
+0.000123
+averge delete time
+0.000067
+averge set time
 0.000166
-averge delete time
-0.000203
-averge set time
-0.000209
 averge get time
-0.000178
+0.000074
 averge delete time
-0.000189
+0.000071
 averge set time
-0.000185
+0.000184
 averge get time
-0.000173
+0.000084
 averge delete time
-0.000177
+0.000037
 averge set time
-0.000201
+0.000056
 averge get time
-0.000178
+0.000074
 averge delete time
-0.000179
+0.000053
 averge set time
-0.000196
+0.000063
 averge get time
-0.000200
+0.000078
 averge delete time
-0.000173
-averge set time
-0.000178
-averge get time
-0.000165
-averge delete time
-0.000194
-averge set time
-0.000207
-averge get time
-0.000174
-averge delete time
-0.000187
-averge set time
-0.000196
-averge get time
-0.000178
-averge delete time
-0.000182
+0.000041
