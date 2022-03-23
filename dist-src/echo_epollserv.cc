@@ -299,6 +299,7 @@ int main(int argc, char *argv[])
 #ifdef DEBUG
 std::cout << "forwarding message to client: " << fd << std::endl;
 std::cout << new_buf << std::endl;
+// 6:[user]delete 9
 #endif
 
                     send(fd, new_buf.c_str(), new_buf.size(), 0);
