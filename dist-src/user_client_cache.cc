@@ -8,6 +8,9 @@
 #include <cstring>
 #include <fstream>
 #include <sys/ioctl.h>
+#include <vector>
+#include <algorithm>
+#include <assert.h>
 
 int on = 1;
 int off = 0;
@@ -58,13 +61,13 @@ int pick_client_hash(int user_fd, std::string id) {
         if (num < 5500) {
             // get first fd
             res = get_fd_by_num(user_fd, 1);
-            cnt1++;
+            //cnt1++;
         }else if (num >=5501 && num <11000) {
             res = get_fd_by_num(user_fd, 2);
-            cnt2++;
+            //cnt2++;
         } else {
             res = get_fd_by_num(user_fd, 3);
-            cnt3++;
+            //cnt3++;
         }
 
     } else if(CLI_NUM == 1) {
@@ -151,6 +154,8 @@ int main(int argc, char *argv[])
     socklen_t adr_sz;
     int i;
     char buf[BUF_SIZE];
+    socklen_t clnt_adr_sz;
+
     serv_sock = socket(PF_INET, SOCK_STREAM, 0);
     if (serv_sock == -1)
         error_handling("socket() error");
