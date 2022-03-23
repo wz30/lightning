@@ -296,6 +296,8 @@ int main(int argc, char *argv[])
         count ++;
         if(count==10) break;
     }
+    // close_cli_sock();
+    for(int num : myList) close(num);
     close(sock);
     return 0;
 }
