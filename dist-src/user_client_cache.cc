@@ -123,27 +123,27 @@ int main(int argc, char *argv[])
     struct sockaddr_in serv_adr;
 
     // client part: connect to master with specified ip and port
-    if (argc != 3)
-    {
-        printf("Usage : %s <IP> <port>\n", argv[0]);
-        exit(1);
-    }
+    // if (argc != 3)
+    // {
+    //     printf("Usage : %s <IP> <port>\n", argv[0]);
+    //     exit(1);
+    // }
 
-    sock = socket(PF_INET, SOCK_STREAM, 0);
-    //Enable non-blocking
+    // sock = socket(PF_INET, SOCK_STREAM, 0);
+    // //Enable non-blocking
 
-    if (sock == -1)
-        error_handling("socket() error");
+    // if (sock == -1)
+    //     error_handling("socket() error");
 
-    memset(&serv_adr, 0, sizeof(serv_adr));
-    serv_adr.sin_family = AF_INET;
-    serv_adr.sin_addr.s_addr = inet_addr(argv[1]);
-    serv_adr.sin_port = htons(atoi(argv[2]));
+    // memset(&serv_adr, 0, sizeof(serv_adr));
+    // serv_adr.sin_family = AF_INET;
+    // serv_adr.sin_addr.s_addr = inet_addr(argv[1]);
+    // serv_adr.sin_port = htons(atoi(argv[2]));
 
-    if (connect(sock, (struct sockaddr *)&serv_adr, sizeof(serv_adr)) == -1)
-        error_handling("connect() error!");
-    else
-        puts("Connected...........");
+    // if (connect(sock, (struct sockaddr *)&serv_adr, sizeof(serv_adr)) == -1)
+    //     error_handling("connect() error!");
+    // else
+    //     puts("Connected...........");
 
     // end of acting as a client
     remove(LOG_FILE);
