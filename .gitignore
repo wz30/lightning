@@ -33,3 +33,4 @@
 
 # unrelated files
 dist-src/dump.rdb
+dist-src/log/*
