@@ -47,7 +47,7 @@ int get_fd_by_num(int user_fd, int num) {
 // using hashing and assume the server will not leave the cluster
 // we need at least three servers
 int pick_client_hash(int user_fd, std::string id) {
-    assert(myList.size()>=2);
+//    assert(myList.size()>=2);
     int res = -1;
     int num = my_hash(id);
     if (CLI_NUM == 2) {
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     clnt_adr_sz = sizeof(clnt_adr);
 
     printf("waiting for the client to connect\n");
-    for(i = 0; i<3; i++) {
+    for(i = 0; i<CLI_NUM; i++) {
         clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_adr, &clnt_adr_sz);
         if (clnt_sock == -1)
             error_handling("accept() error");
