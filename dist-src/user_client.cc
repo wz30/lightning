@@ -14,6 +14,93 @@ int off = 0;
 
 #define LOG_FILE "log/log_file.txt"
 #define BUF_SIZE 1024
+
+#define MAX_HASH_SIZE 16383  // range is 0-16383 
+
+int my_hash(std::string str) {
+
+    std::hash<std::string> hash_fn;
+    int num = (int) hash_fn(str) % (MAX_HASH_SIZE+1);
+
+#ifdef DEBUG
+    std::cout << "hash num" << num << std::endl;
+#endif
+
+    return num;
+}
+// get num-th fd from Mylist
+int get_fd_by_num(int user_fd, int num) {
+    for(int i = 0; i<num; i++) {
+        if(user_fd==myList[i]) {
+            return myList[num];
+        }
+    }
+    return myList[num-1];
+}
+
+// using hashing and assume the server will not leave the cluster
+// we need at least three servers
+int pick_client_hash(int user_fd, std::string id) {
+    assert(myList.size()>=2);
+    int res = -1;
+    int num = my_hash(id);
+    if (CLI_NUM == 2) {
+        if (num < 8190) {
+            // get first fd
+            res = get_fd_by_num(user_fd, 1);
+        }else {
+            res = get_fd_by_num(user_fd, 2);
+        }
+    }else if (CLI_NUM == 3) {
+        if (num < 5500) {
+            // get first fd
+            res = get_fd_by_num(user_fd, 1);
+            cnt1++;
+        }else if (num >=5501 && num <11000) {
+            res = get_fd_by_num(user_fd, 2);
+            cnt2++;
+        } else {
+            res = get_fd_by_num(user_fd, 3);
+            cnt3++;
+        }
+
+    } else if(CLI_NUM == 1) {
+        res = get_fd_by_num(user_fd, 1);
+    } else if(CLI_NUM == 5) {
+        if (num < 3300) {
+            res = get_fd_by_num(user_fd, 1);
+        } else if(num>=3300 && num < 6600) {
+            res = get_fd_by_num(user_fd, 2);
+        } else if(num>=6600 && num < 9900) {
+            res = get_fd_by_num(user_fd, 3);
+        } else if(num>=9900 && num < 13200) {
+            res = get_fd_by_num(user_fd, 4);
+        } else {
+            res = get_fd_by_num(user_fd, 5);
+        } 
+    
+    } else if(CLI_NUM == 7) {
+        if (num < 2400) {
+            res = get_fd_by_num(user_fd, 1);
+        } else if(num>=2400 && num < 4800) {
+            res = get_fd_by_num(user_fd, 2);
+        } else if(num>=4800 && num < 7200) {
+            res = get_fd_by_num(user_fd, 3);
+        } else if(num>=7200 && num < 9600) {
+            res = get_fd_by_num(user_fd, 4);
+        } else if(num>=9600 && num < 12000) {
+            res = get_fd_by_num(user_fd, 5);
+        } else if(num>=12000 && num < 14400) {
+            res = get_fd_by_num(user_fd, 6);
+        } else {
+            res = get_fd_by_num(user_fd, 7);
+        }  
+    }
+    return res;
+}
+
+
+
 void error_handling(char *message);
 
 void write_log_file( const std::string &text )
@@ -29,6 +116,7 @@ int main(int argc, char *argv[])
     int str_len;
     struct sockaddr_in serv_adr;
 
+    // client part: connect to master with specified ip and port
     if (argc != 3)
     {
         printf("Usage : %s <IP> <port>\n", argv[0]);
@@ -51,8 +139,12 @@ int main(int argc, char *argv[])
     else
         puts("Connected...........");
 
+    // end of acting as a client
     remove(LOG_FILE);
    
+    // act as a server so that client in cluster can connect
+
+    // end of acting as a server setup
         
     //ioctl(sock, FIONBIO, &(on));
  
