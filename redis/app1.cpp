@@ -54,14 +54,15 @@ int main(int argc, char *argv[]) {
 
     std::cout << "del: " << duration.count()/num_test  << std::endl; 
     std::cout << "cluster:" << std::endl;
+    srand(1);
 for(int i = 0; i<10; i++) {
     // redis cluster
     auto redis_cluster = RedisCluster("tcp://172.17.0.2:7000");
-     
+    int num = 1+rand()%1000; 
     start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i<num_test; i++) {
-      string key = "key" + std::to_string(i);
-      string val = "val" + std::to_string(i);
+      string key = "key" + std::to_string(i*num);
+      string val = "val" + std::to_string(i*num);
       redis_cluster.set(key, val);
     }
     end = std::chrono::high_resolution_clock::now();
@@ -72,7 +73,7 @@ for(int i = 0; i<10; i++) {
 
     start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i<num_test; i++) {
-      string key = "key" + std::to_string(i);
+      string key = "key" + std::to_string(i*num);
       auto val = redis_cluster.get(key);
     }
     end = std::chrono::high_resolution_clock::now();
@@ -83,7 +84,7 @@ for(int i = 0; i<10; i++) {
     start = std::chrono::high_resolution_clock::now();
     // delete the keys
     for(int i = 0; i<num_test; i++) {
-      string key = "key" + std::to_string(i);
+      string key = "key" + std::to_string(i*num);
       redis_cluster.del(key);
     }
     end = std::chrono::high_resolution_clock::now();

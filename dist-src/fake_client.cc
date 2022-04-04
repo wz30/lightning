@@ -237,6 +237,7 @@ int main(int argc, char *argv[])
 // #endif
       } else {
           std::cout << "incorrect message from server" << std::endl; 
+          break;
       }
     }
     close(sock);
