@@ -9,14 +9,23 @@
 #include <algorithm>
 #include <sstream>
 #include <sys/ioctl.h>
+#include <time.h>
 int on = 1;
 int off = 1;
 
 #include "client.h"
 // #define DEBUG
+#define TIME
 
 #define BUF_SIZE 1024
 void error_handling(char *message);
+
+void timestamp()
+{
+    time_t ltime; /* calendar time */
+    ltime=time(NULL); /* get current cal time */
+    printf("%s",asctime( localtime(&ltime) ) );
+}
 
 std::vector<std::string> split(std::string str, char del) {
   std::vector<std::string> internal; 
@@ -129,7 +138,15 @@ int process_msg(char *fd, LightningClient &client, char *message){
     // }
     // std::cout << std::stoi(sep[2]) << std::endl;
     //status = fake_set(std::stoi(sep[1]), std::stoi(sep[2]));
+#ifdef TIME
+    timestamp();
+#endif
     status = light_set(client, std::stoi(sep[1]), std::stoi(sep[2]));
+#ifdef TIME
+    timestamp();
+#endif
+
+
   } else if(std::string(message).find("get") != std::string::npos) {
 
     std::vector<std::string> sep = split(message, ' ');
