@@ -22,9 +22,12 @@ void error_handling(char *message);
 
 void timestamp()
 {
-    time_t ltime; /* calendar time */
-    ltime=time(NULL); /* get current cal time */
-    printf("%s",asctime( localtime(&ltime) ) );
+    // time_t ltime; /* calendar time */
+    // ltime=time(NULL); /* get current cal time */
+    // printf("%s",asctime( localtime(&ltime) ) );
+    struct timeval tv;                                                                                                             
+    gettimeofday(&tv,NULL);                                                                                                        
+    printf("%ld\n", tv.tv_usec);
 }
 
 std::vector<std::string> split(std::string str, char del) {
