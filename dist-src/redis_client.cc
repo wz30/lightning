@@ -10,9 +10,11 @@
 #include <sstream>
 #include <sw/redis++/redis++.h>
 #include <bits/stdc++.h>
+#include <sys/time.h>
 //#include "client.h"
 
 // #define DEBUG
+#define TIME
 
 using namespace sw::redis;
 using namespace std; 
@@ -20,6 +22,17 @@ using namespace std;
 Redis client = Redis("tcp://127.0.0.1:6379");    
 #define BUF_SIZE 1024
 void error_handling(char *message);
+
+void timestamp()
+{
+    // time_t ltime; /* calendar time */
+    // ltime=time(NULL); /* get current cal time */
+    // printf("%s",asctime( localtime(&ltime) ) );
+    struct timeval tv;                                                                                                             
+    gettimeofday(&tv,NULL);                                                                                                        
+    printf("%ld\n", tv.tv_usec);
+}
+
 
 std::vector<std::string> split(std::string str, char del) {
   std::vector<std::string> internal; 
@@ -34,7 +47,7 @@ std::vector<std::string> split(std::string str, char del) {
 }
 
 int fake_set(int id, int obj_size) {
-  std::cout << "inside fake set function" <<std::endl;
+  // std::cout << "inside fake set function" <<std::endl;
   if(id < 0) return -1;
   if(obj_size <=0) return -1;
   // sleep(1);
@@ -48,7 +61,7 @@ int redis_set(std::string key, std::string val) {
 }
 
 int fake_get(int id) {
-  std::cout << "inside fake get function" <<std::endl;
+  // std::cout << "inside fake get function" <<std::endl;
   if(id < 0) return -1;
   // sleep(1);
   return 1;
@@ -133,7 +146,13 @@ int process_redis_msg(char *fd, char *message){
       return -3;
     }
     // auto start = std::chrono::high_resolution_clock::now(); 
+#ifdef TIME
+    timestamp();
+#endif
     status = redis_set(sep[1], sep[2]);
+#ifdef TIME
+    timestamp();
+#endif
     // auto end = std::chrono::high_resolution_clock::now();
     // std::chrono::duration<double> duration = end - start;
     // std::cout << "redis set time" << duration.count() << std::endl;
