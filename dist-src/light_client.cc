@@ -10,6 +10,7 @@
 #include <sstream>
 #include <sys/ioctl.h>
 #include <time.h>
+#include <sys/time.h>
 int on = 1;
 int off = 1;
 
